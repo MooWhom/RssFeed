@@ -1,17 +1,13 @@
 # RssFeed
 
-A simple AWS Lambda setup to listen for new posts to a set of RSS feeds. Each new found post in each feed is sent to a pre-defined Discord webhook.
-
-RssFeed uses AWS's DynamoDB to store data about the last-posted link of a specific feed. This allows the script to remember where it last left off between invocations, and prevents duplciate posts being sent.
-
-The Lambda should be triggered on a set schedule. For timely updates, a period of about 2/3 minutes is recommended. This also ensures executions remain in the free period tier.
+A simple AWS Lambda setup to listen for new posts to a set of RSS feeds. Each new found post in each feed is sent to a pre-defined Discord webhook. This project uses a SAM template to configure an AWS Lambda function that stores the date of the article it last posted from each configured feed in a DynamoDB database. The default configuration uses a CloudWatch Events (EventBridge) timer trigger set to three minutes to call the function every three minutes.
 
 ## Deployment
 
-### DynamoDB
-A DynamoDB table called `rssfeed` must exist. The primary key is `feed`, which associates a string of the time the last published entry of each feed was created to said feed. 
+Using SAM, simply run:
 
-### Lambda
+- `sam build`
+- `sam deploy` 
 
 
 ## Environment variables
