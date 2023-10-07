@@ -53,7 +53,7 @@ def process_feeds():
         rss_feed = feedparser.parse(rss_link)
 
         new_entries = list(filter(
-            lambda entry: convert_pub_string_to_datetime(entry.published) > last_pub_date, 
+            lambda entry: datetime.strptime(entry.published, '%a, %d %b %Y %H:%M:%S %Z').replace(tzinfo=timezone.utc) > last_pub_date, 
             rss_feed.entries
         ))
 
