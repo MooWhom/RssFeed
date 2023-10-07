@@ -21,13 +21,19 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install -r requirements.txt -t package/
+          mkdir -p package/python/lib/python3.8/site-packages
+          pip install -r requirements.txt -t package/python/lib/python3.8/site-packages/
 
       - name: Package and deploy to AWS Lambda
         run: |
-          zip -r lambda_function_payload.zip ./src ./package
+          cd package && zip -r ../lambda_function_payload.zip . 
+          cd .. && zip -g lambda_function_payload.zip -r src/
           aws lambda update-function-code --function-name RSSFeedProcessor --zip-file fileb://lambda_function_payload.zip
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_DEFAULT_REGION: 'us-west-1'
+
+
+       
+
