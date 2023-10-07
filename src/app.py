@@ -4,6 +4,7 @@ import requests
 import os
 from dotenv import load_dotenv
 
+from dateutil import parser, tz
 from datetime import datetime, timezone
 
 load_dotenv()
@@ -53,7 +54,7 @@ def process_feeds():
         rss_feed = feedparser.parse(rss_link)
 
         new_entries = list(filter(
-            lambda entry: datetime.strptime(entry.published, '%a, %d %b %Y %H:%M:%S %Z').replace(tzinfo=timezone.utc) > last_pub_date, 
+            lambda entry: parser.parse(entry.published).astimezone(tz.UTC) > last_pub_date, 
             rss_feed.entries
         ))
 
