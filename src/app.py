@@ -18,7 +18,7 @@ rss_feeds = {
 
 # Use ssm to store last-posted data.
 dynamodb = boto3.resource('dynamodb')
-table = dynamodb.Table('rssfeed')
+table = dynamodb.Table('rssfeeds')
 
 def generate_ai_summary(link: str):
     pass
