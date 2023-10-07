@@ -16,7 +16,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
-          python-version: 3.8 # or your Python version
+          python-version: 3.8
 
       - name: Install dependencies
         run: |
@@ -29,4 +29,4 @@ jobs:
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_DEFAULT_REGION: 'us-west-1' # change to your region
+          AWS_DEFAULT_REGION: 'us-west-1'
