@@ -105,5 +105,11 @@ def retrieve_datetime_for_parameter(feed_name: str) -> datetime | None:
     else:
         return None
 
+def lambda_handler(event, context):
+    process_feeds()
+    return {
+        'statusCode': 200
+    }
+
 if __name__ == "__main__":
     process_feeds()

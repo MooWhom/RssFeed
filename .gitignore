@@ -1,2 +1,4 @@
 venv/
 .env
+/package/
+lambda_function_payload.zip
