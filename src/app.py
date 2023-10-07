@@ -53,14 +53,13 @@ def process_feeds():
         rss_feed = feedparser.parse(rss_link)
 
         new_entries = list(filter(
-            lambda entry: datetime.strptime(entry.published, '%a, %d %b %Y %H:%M:%S %Z').replace(tzinfo=timezone.utc) > last_pub_date, 
+            lambda entry: convert_pub_string_to_datetime(entry.published) > last_pub_date, 
             rss_feed.entries
         ))
 
         # Reverse so that the newest post is sent last.
         new_entries.reverse()
         
-        print(len(new_entries))
         for entry in new_entries:
             embed = generate_discord_embed(entry.link)
             did_send = send_discord_message(feed_name, embed)
