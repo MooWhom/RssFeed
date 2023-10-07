@@ -2,8 +2,11 @@ import boto3
 import feedparser
 import requests
 import os
+from dotenv import load_dotenv
 
 from datetime import datetime, timezone
+
+load_dotenv()
 
 WEBHOOK_URL = os.environ.get("WEBHOOK_URL")
 
@@ -56,7 +59,8 @@ def process_feeds():
 
         # Reverse so that the newest post is sent last.
         new_entries.reverse()
-
+        
+        print(len(new_entries))
         for entry in new_entries:
             embed = generate_discord_embed(entry.link)
             did_send = send_discord_message(feed_name, embed)
