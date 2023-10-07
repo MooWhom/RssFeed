@@ -22,6 +22,11 @@ Resources:
       Environment:
         Variables:
           TABLE_NAME: !Ref rssfeedtable
+      Events:
+        Timer:
+          Type: Schedule
+          Properties:
+            Schedule: rate(3 minutes)
 
   rssfeedtable:
     Type: AWS::DynamoDB::Table
