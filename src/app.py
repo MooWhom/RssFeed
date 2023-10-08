@@ -2,8 +2,8 @@ import boto3
 import feedparser
 import requests
 import os
-from dotenv import load_dotenv
 
+from dotenv import load_dotenv
 from dateutil import parser, tz
 from datetime import datetime, timezone
 
@@ -22,7 +22,7 @@ rss_feeds = {
     }
 }
 
-# Use ssm to store last-posted data.
+# Use dynamodb to store last-posted data.
 dynamodb = boto3.resource('dynamodb')
 table = dynamodb.Table('rssfeeds')
 
