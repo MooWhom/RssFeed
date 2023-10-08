@@ -81,7 +81,7 @@ def process_feeds():
 
 # -- MARK: Helper functions
 def convert_pub_string_to_datetime(date: str):
-    return datetime.strptime(date, '%a, %d %b %Y %H:%M:%S %Z').replace(tzinfo=timezone.utc)
+    return parser.parse(date).astimezone(tz.UTC)
 
 def set_datetime_for_parameter(feed_name: str, date: datetime):
     # Failure here could result in duplicate posts.

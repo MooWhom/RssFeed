@@ -2,9 +2,14 @@ AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
 Description: rssfeed - template for script that sends RSS feed entries to a Discord webhook.
 
+Parameters:
+  WebhookUrl:
+    Type: String
+    Description: URL for the Discord webhook
+
 Globals:
   Function:
-    Timeout: 15
+    Timeout: 16
     MemorySize: 128
 
 Resources:
@@ -22,6 +27,7 @@ Resources:
       Environment:
         Variables:
           TABLE_NAME: !Ref rssfeedtable
+          WEBHOOK_URL: !Ref WebhookUrl
       Events:
         Timer:
           Type: Schedule
@@ -29,17 +35,17 @@ Resources:
             Schedule: rate(3 minutes)
 
   rssfeedtable:
-    Type: AWS::DynamoDB::Table
-    Properties:
-      TableName: rssfeeds
-      AttributeDefinitions:
-        -
-          AttributeName: feed
-          AttributeType: S
-      KeySchema:
-        -
-          AttributeName: feed
-          KeyType: HASH
-      ProvisionedThroughput:
-        ReadCapacityUnits: 5
-        WriteCapacityUnits: 5
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: rssfeeds
+        AttributeDefinitions:
+          -
+            AttributeName: feed
+            AttributeType: S
+        KeySchema:
+          -
+            AttributeName: feed
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 5
+          WriteCapacityUnits: 5
