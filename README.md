@@ -1,14 +1,13 @@
 # RssFeed
 
-A simple AWS Lambda setup to listen for new posts to a set of RSS feeds. Each new found post in each feed is sent to a pre-defined Discord webhook. This project uses a SAM template to configure an AWS Lambda function that stores the date of the article it last posted from each configured feed in a DynamoDB database. The default configuration uses a CloudWatch Events (EventBridge) timer trigger set to three minutes to call the function every three minutes.
+A simple AWS Lambda setup to listen for new posts from a set of RSS feeds. Each new  post in each feed is sent to a pre-defined Discord webhook. This project uses a SAM template to configure an AWS Lambda function. To store the date of the article it last posted from each configured feed, the template includes a DynamoDB database. The default configuration uses a CloudWatch Events (EventBridge) timer trigger to call the function every three minutes.
 
 ## Deployment
 
 Using SAM, simply run:
 
 - `sam build`
-- `sam deploy` 
-
+- `sam deploy --parameter-overrides ParameterKey=WebhookUrl,ParameterValue=<your webhook URL>` 
 
 ## Environment variables
 
