@@ -15,6 +15,9 @@ rss_feeds = {
     "MacRumors": {
         "rss_link": "http://feeds.macrumors.com/MacRumors-All"
     },
+    "Newsroom": {
+        "rss_link": "https://www.apple.com/newsroom/rss-feed.rss"
+    }
 }
 
 # Use ssm to store last-posted data.
@@ -48,13 +51,13 @@ def process_feeds():
         # If this feed has not been seen before, only send posts created after this invocation. 
         if (not last_pub_date):
             set_datetime_for_parameter(feed_name, datetime.now(timezone.utc))
-            break
+            continue
 
         rss_link = feed_data["rss_link"]
         rss_feed = feedparser.parse(rss_link)
 
         new_entries = list(filter(
-            lambda entry: parser.parse(entry.published).astimezone(tz.UTC) > last_pub_date, 
+            lambda entry: parser.parse(entry.updated).astimezone(tz.UTC) > last_pub_date, 
             rss_feed.entries
         ))
 
@@ -70,7 +73,9 @@ def process_feeds():
             if (not did_send):
                 return
 
-            entry_published_date = convert_pub_string_to_datetime(entry.published)
+            # Use updated as some feeds (Newsroom) only report updated. Parameter maps to published
+            # if updated does not exist.
+            entry_published_date = convert_pub_string_to_datetime(entry.updated)
 
             # Entries here always exceed 'last_pub_date' as well as the previous entry,
             # but we'll be safe and check anyway.
