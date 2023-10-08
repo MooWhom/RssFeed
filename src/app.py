@@ -13,10 +13,12 @@ WEBHOOK_URL = os.environ.get("WEBHOOK_URL")
 
 rss_feeds = {
     "MacRumors": {
-        "rss_link": "http://feeds.macrumors.com/MacRumors-All"
+        "rss_link": "http://feeds.macrumors.com/MacRumors-All",
+        "webhook_img": "https://media.discordapp.net/attachments/792320316314746903/1115075693806616666/webhook2.png"
     },
     "Newsroom": {
-        "rss_link": "https://www.apple.com/newsroom/rss-feed.rss"
+        "rss_link": "https://www.apple.com/newsroom/rss-feed.rss",
+        "webhook_img": "https://media.discordapp.net/attachments/792320316314746903/1115075693517213826/webhook3.png"
     }
 }
 
@@ -27,17 +29,19 @@ table = dynamodb.Table('rssfeeds')
 def generate_ai_summary(link: str):
     pass
 
-def generate_discord_embed(link: str):
+def generate_discord_embed(feed_name: str, link: str):
+    if (feed_name not in rss_feeds):
+        raise
+
     embed = {
+        "username": feed_name,
+        "avatar_url": rss_feeds[feed_name]["webhook_img"],
         "content": link
     }
     
     return embed
 
-def send_discord_message(feed_name: str, embed): 
-    if (feed_name not in rss_feeds):
-        return None
-
+def send_discord_message(embed): 
     response = requests.post(
         WEBHOOK_URL, embed
     )
@@ -65,8 +69,8 @@ def process_feeds():
         new_entries.reverse()
         
         for entry in new_entries:
-            embed = generate_discord_embed(entry.link)
-            did_send = send_discord_message(feed_name, embed)
+            embed = generate_discord_embed(feed_name, entry.link)
+            did_send = send_discord_message(embed)
 
             # Failure to send may indicate a rate limit. We can attempt the next time the script runs, 
             # so we'll return entirely to avoid further rate limiting.
